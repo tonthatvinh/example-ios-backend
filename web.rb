@@ -63,6 +63,27 @@ post '/capture_payment' do
         payload[:return_url],
       )
     end
+    Stripe::Order.create({
+                         currency: 'usd',
+                         email: 'jenny.rosen@example.com',
+                         items: [
+                         {
+                         type: 'sku',
+                         parent: '1234512345',
+                         quantity: 2,
+                         },
+                         ],
+                         shipping: {
+                         name: 'Jenny Rosen',
+                         address: {
+                         line1: '1234 Main Street',
+                         city: 'San Francisco',
+                         state: 'CA',
+                         postal_code: '94111',
+                         country: 'US',
+                         },
+                         },
+                         })
   rescue Stripe::StripeError => e
     status 402
     return log_info("Error: #{e.message}")
